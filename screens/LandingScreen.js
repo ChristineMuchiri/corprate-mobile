@@ -56,7 +56,7 @@ export default function LandingPage({ navigation }) {
         </TouchableOpacity>
       </Animated.View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity onPress={() => navigation.navigate('MainTabs')}>
         <SwayingSkipText />
       </TouchableOpacity>
       {/* Feature Section */}
