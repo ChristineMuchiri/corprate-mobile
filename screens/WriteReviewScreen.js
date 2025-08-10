@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, TouchableOpacity, Animated, ScrollView } from "react-native";
 
 export default function WriteReviewScreen() {
   const [showMore, setShowMore] = useState(false);
+  const navigation = useNavigation();
 
   const sections = [
     { title: "Company Rating", desc: "How satisfied are you overall?", emoji: "⭐" },
@@ -16,7 +18,16 @@ export default function WriteReviewScreen() {
   ];
 
   const renderSection = (item, index) => (
-    <TouchableOpacity key={index} style={styles.card} activeOpacity={0.8}>
+    <TouchableOpacity 
+      key={index} 
+      style={styles.card} 
+      activeOpacity={0.8}
+      onPress={() => {
+        if (item.title === "Company Rating") {
+        navigation.navigate("CompanyRatingScreen");
+      }
+      }}
+    >
       <Text style={styles.emoji}>{item.emoji}</Text>
       <View>
         <Text style={styles.cardTitle}>{item.title}</Text>
@@ -32,6 +43,8 @@ export default function WriteReviewScreen() {
       {sections.map(renderSection)}
 
       {showMore && moreSections.map(renderSection)}
+      
+
 
       <TouchableOpacity
         style={styles.moreBtn}
