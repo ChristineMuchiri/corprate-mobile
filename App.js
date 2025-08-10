@@ -6,6 +6,9 @@ import LandingScreen from "./screens/LandingScreen";
 import MainTabs from "./navigation/MainTabs";
 import CompanyRatingScreen from "./screens/CompanyRatingScreen";
 import GeneralReviewScreen from "./screens/GeneralReviewScreen";
+import SalaryBenefitsScreen from "./screens/SalaryBenefitsScreen";
+import WorkplaceVibesScreen from "./screens/WorkplaceVibesScreen";
+import InterviewExperienceScreen from "./screens/InterviewExperienceScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +22,9 @@ export default function App() {
         {/* Additional screens */}
         <Stack.Screen name="CompanyRatingScreen" component={CompanyRatingScreen} />
         <Stack.Screen name="GeneralReviewScreen" component={GeneralReviewScreen} />
+        <Stack.Screen name="SalaryBenefitsScreen" component={SalaryBenefitsScreen} />
+        <Stack.Screen name="WorkplaceVibesScreen" component={WorkplaceVibesScreen} />
+        <Stack.Screen name="InterviewExperienceScreen" component={InterviewExperienceScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

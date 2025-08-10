@@ -7,26 +7,26 @@ export default function WriteReviewScreen() {
   const navigation = useNavigation();
 
   const sections = [
-    { title: "Company Rating", desc: "How satisfied are you overall?", emoji: "⭐" },
-    { title: "General Review", desc: "Share your thoughts about working here.", emoji: "💬" },
-    { title: "Salary & Benefits", desc: "Rate pay, perks, and allowances.", emoji: "💰" },
+    { title: "Company Rating", desc: "How satisfied are you overall?", emoji: "⭐", screen: "CompanyRatingScreen" },
+    { title: "General Review", desc: "Share your thoughts about working here.", emoji: "💬" , screen: "GeneralReviewScreen"},
+    { title: "Salary & Benefits", desc: "Rate pay, perks, and allowances.", emoji: "💰" , screen: "SalaryBenefitsScreen"},
   ];
 
   const moreSections = [
-    { title: "Workplace Vibes", desc: "What's the office culture like?", emoji: "🎉" },
-    { title: "Interview Experience", desc: "Was the process fair and smooth?", emoji: "📝" },
+    { title: "Workplace Vibes", desc: "What's the office culture like?", emoji: "🎉", screen: "WorkplaceVibesScreen" },
+    { title: "Interview Experience", desc: "Was the process fair and smooth?", emoji: "📝", screen: "InterviewExperienceScreen" },
   ];
+
+  const handleNavigation = (screenName) => {
+    navigation.navigate(screenName);
+  };
 
   const renderSection = (item, index) => (
     <TouchableOpacity 
       key={index} 
       style={styles.card} 
       activeOpacity={0.8}
-      onPress={() => {
-        if (item.title === "Company Rating") {
-        navigation.navigate("CompanyRatingScreen");
-      }
-      }}
+      onPress={() => handleNavigation(item.screen)}
     >
       <Text style={styles.emoji}>{item.emoji}</Text>
       <View>

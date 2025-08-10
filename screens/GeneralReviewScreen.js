@@ -90,13 +90,19 @@ const GeneralReviewPage = () => {
           />
         </View>
 
-        {/* Submit Button */}
-        <TouchableOpacity 
-          style={styles.submitButton}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.submitButtonText}>Submit Review</Text>
-        </TouchableOpacity>
+        {/* Submit Button - Now inside ScrollView but sticks to bottom */}
+                <View style={styles.submitButtonContainer}>
+                  <TouchableOpacity 
+                    style={[
+                      styles.submitButton,
+                      (!companyName || !pros || !cons) && styles.disabledButton
+                    ]}
+                    onPress={handleSubmit}
+                    disabled={!companyName || !pros || !cons}
+                  >
+                    <Text style={styles.submitButtonText}>Submit Review</Text>
+                  </TouchableOpacity>
+                </View>
       </ScrollView>
     </View>
   );
@@ -156,9 +162,17 @@ const styles = StyleSheet.create({
   submitButton: {
     backgroundColor: '#1e88e5',
     borderRadius: 8,
-    padding: 14,
+    padding: 10,
+    height: 44,
     alignItems: 'center',
-    marginTop: 16,
+    justifyContent: 'center',
+    marginTop: 12,
+    width: 150, // Fixed width
+    alignSelf: 'center', // Center horizontally
+  },
+   disabledButton: {
+    backgroundColor: '#6b6a77ff',
+    opacity: 0.7,
   },
   submitButtonText: {
     color: '#ffffff',

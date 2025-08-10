@@ -221,9 +221,13 @@ const styles = StyleSheet.create({
   submitButton: {
     backgroundColor: '#1e88e5',
     borderRadius: 8,
-    padding: 12,
+    padding: 10,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 12,
+    width: 150, // Fixed width
+    alignSelf: 'center', // Center horizontally
   },
   disabledButton: {
     backgroundColor: '#6b6a77ff',
