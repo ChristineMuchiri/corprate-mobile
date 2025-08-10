@@ -70,7 +70,7 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
           <Text style={styles.sectionTitle}>Process Overview</Text>
           <View style={styles.row}>
             <TextInput
-              style={[styles.input, { flex: 1, marginRight: 8 }]}
+              style={[styles.input, { marginBottom: 12 }]}
               placeholder="Total rounds"
               placeholderTextColor="#666"
               keyboardType="numeric"
@@ -78,7 +78,7 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
               onChangeText={setProcessRounds}
             />
             <TextInput
-              style={[styles.input, { flex: 1 }]}
+              style={[styles.input]}
               placeholder="Duration (e.g. 3 weeks)"
               placeholderTextColor="#666"
               value={processDuration}
@@ -165,7 +165,7 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
             ))}
           </View>
         </View>
-      </ScrollView>
+      
 
       {/* Submit Button */}
       <View style={styles.submitContainer}>
@@ -180,6 +180,7 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
           <Text style={styles.submitText}>Share Experience</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </View>
   );
 };
@@ -234,7 +235,6 @@ const styles = StyleSheet.create({
     minHeight: 120,
     textAlignVertical: 'top',
   },
-  
   typeGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -283,23 +283,21 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
   },
-  submitContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: 0,
-    paddingHorizontal: 16,
-    backgroundColor: '#0b0d16',
-    borderTopWidth: 1,
-    borderTopColor: '#252838',
-    paddingTop: 12,
+  submitButtonContainer: {
+    marginTop: 16,
+    marginBottom: 8,
   },
   submitButton: {
     backgroundColor: '#1e88e5',
     borderRadius: 8,
-    padding: 14,
+    padding: 10,
+    height: 44,
     alignItems: 'center',
-    width: 150,
+    justifyContent: 'center',
+    marginTop: 12,
+    marginVertical: 16,
+    width: 150, // Fixed width
+    alignSelf: 'center', // Center horizontally
   },
   disabledButton: {
     backgroundColor: '#252838',
