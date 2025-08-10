@@ -43,7 +43,7 @@ export default function LandingPage({ navigation }) {
         {/* <Text style={styles.title}>CorpRate</Text> */}
         <Text style={styles.subtitle}>Real workplace reviews. No filters.</Text>
         <Text style={styles.description}>
-          Share honest workplace experiences anonymously. Help others make informed decisions without creating accounts.
+          Share honest workplace experiences anonymously. Help others make informed decisions.
         </Text>
       </Animated.View>
 
