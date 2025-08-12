@@ -40,7 +40,7 @@ const CompanyRatingsPage = () => {
       if (response.ok) {
         Alert.alert('Review Submitted', 'Thank you for your feedback!',
           
-            { text: 'OK', onPress: () =>  navigation.goBack()}, 
+             navigation.goBack() 
              )
   } else {
         const errorText = await response.text();

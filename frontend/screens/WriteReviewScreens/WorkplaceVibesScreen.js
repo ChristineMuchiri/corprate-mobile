@@ -16,6 +16,7 @@ const WorkplaceVibesScreen = ({ navigation }) => {
     'Traditional', 'Fast-paced', 'Relaxed', 'High-pressure',
     'Social', 'Hierarchical', 'Flat structure', 'Remote-friendly'
   ];
+  
 
   const toggleAttribute = (attr) => {
     setSelectedAttributes(prev => 
@@ -128,6 +129,7 @@ const WorkplaceVibesScreen = ({ navigation }) => {
             onChangeText={setFreeResponse}
           />
         </View>
+      
       
         {/* Submit Button */}
         <View style={styles.submitButtonContainer}>
