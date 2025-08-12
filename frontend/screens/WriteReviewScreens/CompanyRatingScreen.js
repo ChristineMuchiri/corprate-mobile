@@ -38,13 +38,18 @@ const CompanyRatingsPage = () => {
     );
       const data = await response.json();
       if (response.ok) {
-        Alert.alert('Review Submitted', 'Thank you for your feedback!');
-    navigation.goBack();
+        Alert.alert('Review Submitted', 'Thank you for your feedback!',
+          
+            { text: 'OK', onPress: () =>  navigation.goBack()}, 
+             )
   } else {
-        Alert.alert('Error', data.error || 'Please try again later.');
+        const errorText = await response.text();
+        Alert.alert('Submission Failed', 
+          errorText || 'Something went wrong while submitting your review. Please try again');
   } 
     } catch (error) {
-      console.error('Error submitting review:', error);
+      console.error(error);
+      Alert.alert('Network Error', 'We could not connect to the server. Please check your internet connection and try again.');
   };
   }
   return (

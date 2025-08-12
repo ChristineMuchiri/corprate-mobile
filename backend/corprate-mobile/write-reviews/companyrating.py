@@ -1,7 +1,7 @@
 import json
 import os
 import uuid
-import boto3
+import boto3 # type: ignore
 from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
