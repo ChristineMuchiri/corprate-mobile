@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { reviewThemes } from '../../utilities/theme';
+import { API_BASE_URL } from '@env'; // Ensure you have this set in your .env file
 
 const CompanyRatingsPage = () => {
   const theme = reviewThemes.companyRating;
@@ -20,11 +21,32 @@ const CompanyRatingsPage = () => {
     { icon: 'sentiment-very-dissatisfied', label: 'Terrible' },
   ];
 
-  const handleSubmit = () => {
-    Alert.alert('Review Submitted', 'Thank you for your feedback!');
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/write-reviews/companyrating`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          companyName,
+          overallRating,
+          selectedMood: moods[selectedMood]?.label || 'No Mood Selected',
+          reviewText,
+        }),
+      }
+    );
+      const data = await response.json();
+      if (response.ok) {
+        Alert.alert('Review Submitted', 'Thank you for your feedback!');
     navigation.goBack();
+  } else {
+        Alert.alert('Error', data.error || 'Please try again later.');
+  } 
+    } catch (error) {
+      console.error('Error submitting review:', error);
   };
-
+  }
   return (
     <View style={[styles.container, { backgroundColor: reviewThemes.base.background }]}>
       {/* Header with theme color*/}

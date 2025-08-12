@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  corprate-mobile
+
+  Sample SAM Template for corprate-mobile
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 5
+    Runtime: python3.13
+    MemorySize: 128
+    Tracing: Active
+    LoggingConfig:
+      LogFormat: JSON
+  Api:
+    TracingEnabled: true
+Resources:
+
+  CorprateMobileHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Name: CorprateMobileHttpApi
+      StageName: Prod
+      CorsConfiguration:
+        AllowMethods:
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+          - Authorization
+        AllowOrigins:
+          - '*'
+  
+  CorprateMobileTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: CorprateMobileTable
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+      
+
+  CompanyRatingFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: write-reviews/
+      Handler: companyrating.lambda_handler
+      Runtime: python3.13
+      Architectures:
+      - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref CorprateMobileTable
+      Events:
+        HelloWorld:
+          Type: HttpApi 
+          Properties:
+            Path: /write-reviews/companyrating
+            Method: POST
+            ApiId: !Ref CorprateMobileHttpApi
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CorprateMobileTable
+
+  
+Outputs:
+  CompanyRatingHttpApiUrl:
+    Description: API Gateway endpoint URL for Prod stage for Company Rating function
+    Value: !Sub "https://${CorprateMobileHttpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/write-reviews/companyrating"
+  
