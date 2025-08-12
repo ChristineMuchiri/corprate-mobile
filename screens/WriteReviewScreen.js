@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, TouchableOpacity, Animated, ScrollView } from "react-native";
 
@@ -7,14 +8,42 @@ export default function WriteReviewScreen() {
   const navigation = useNavigation();
 
   const sections = [
-    { title: "Company Rating", desc: "How satisfied are you overall?", emoji: "⭐", screen: "CompanyRatingScreen" },
-    { title: "General Review", desc: "Share your thoughts about working here.", emoji: "💬" , screen: "GeneralReviewScreen"},
-    { title: "Salary & Benefits", desc: "Rate pay, perks, and allowances.", emoji: "💰" , screen: "SalaryBenefitsScreen"},
+    {
+    title: "Company Rating",
+    desc: "How satisfied are you overall?",
+    icon: "star",
+    color: "#FFD700", // Gold for ratings
+    screen: "CompanyRatingScreen"
+  },
+    {
+    title: "General Review",
+    desc: "Share your thoughts about working here.",
+    icon: "edit",
+    color: "#1e88e5", // Blue for text-based
+    screen: "GeneralReviewScreen"
+  },
+    { title: "Salary & Benefits", 
+      desc: "Rate pay, perks, and allowances.",
+      icon: "attach-money", // MaterialIcons name
+      color: "#4CAF50", // Green for money-related 
+      screen: "SalaryBenefitsScreen"},
   ];
 
   const moreSections = [
-    { title: "Workplace Vibes", desc: "What's the office culture like?", emoji: "🎉", screen: "WorkplaceVibesScreen" },
-    { title: "Interview Experience", desc: "Was the process fair and smooth?", emoji: "📝", screen: "InterviewExperienceScreen" },
+    { 
+      title: "Workplace Vibes", 
+      desc: "What's the office culture like?",
+      icon: "mood", // MaterialIcons name
+      color: "#FF9800", // Orange for mood-related
+      screen: "WorkplaceVibesScreen" 
+    },
+    { 
+      title: "Interview Experience", 
+      desc: "Was the process fair and smooth?",
+      icon: "question-answer", // MaterialIcons name
+      color: "#9C27B0", // Purple for Q&A  
+      screen: "InterviewExperienceScreen" 
+    },
   ];
 
   const handleNavigation = (screenName) => {
@@ -23,18 +52,24 @@ export default function WriteReviewScreen() {
 
   const renderSection = (item, index) => (
     <TouchableOpacity 
-      key={index} 
-      style={styles.card} 
+      key={index}
+      style={[styles.card, { borderLeftWidth: 4, borderLeftColor: item.color }]}
       activeOpacity={0.8}
-      onPress={() => handleNavigation(item.screen)}
-    >
-      <Text style={styles.emoji}>{item.emoji}</Text>
-      <View>
-        <Text style={styles.cardTitle}>{item.title}</Text>
-        <Text style={styles.cardDesc}>{item.desc}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+      onPress={() => navigation.navigate(item.screen)}
+  >
+      <Icon 
+        name={item.icon} 
+        size={24} 
+        color={item.color} 
+        style={styles.icon}
+    />
+    <View style={styles.cardText}>
+      <Text style={styles.cardTitle}>{item.title}</Text>
+      <Text style={styles.cardDesc}>{item.desc}</Text>
+    </View>
+    <Icon name="chevron-right" size={20} color="#666" />
+  </TouchableOpacity>
+);
 
   return (
     <ScrollView style={styles.container}>
@@ -78,10 +113,23 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: 'space-between',
   },
-  emoji: {
-    fontSize: 28,
-    marginRight: 12,
+   cardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1, // Takes all available space except chevron
+  },
+  icon: {
+    marginRight: 16, // Increased from 12 for more space
+    width: 24,
+  },
+  cardText: {
+    flex: 1, // Allows text to take remaining space
+    marginRight: 8, // Space before chevron
+  },
+  chevron: {
+    marginLeft: 'auto', // Pushes to far right
   },
   cardTitle: {
     color: "#fff",
