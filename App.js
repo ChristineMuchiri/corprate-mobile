@@ -4,11 +4,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import LandingScreen from "./screens/LandingScreen";
 import MainTabs from "./navigation/MainTabs";
-import CompanyRatingScreen from "./screens/CompanyRatingScreen";
-import GeneralReviewScreen from "./screens/GeneralReviewScreen";
-import SalaryBenefitsScreen from "./screens/SalaryBenefitsScreen";
-import WorkplaceVibesScreen from "./screens/WorkplaceVibesScreen";
-import InterviewExperienceScreen from "./screens/InterviewExperienceScreen";
+import CompanyRatingScreen from "./screens/WriteReviewScreens/CompanyRatingScreen";
+import GeneralReviewScreen from "./screens/WriteReviewScreens/GeneralReviewScreen";
+import SalaryBenefitsScreen from "./screens/WriteReviewScreens/SalaryBenefitsScreen";
+import WorkplaceVibesScreen from "./screens/WriteReviewScreens/WorkplaceVibesScreen";
+import InterviewExperienceScreen from "./screens/WriteReviewScreens/InterviewExperienceScreen";
 
 const Stack = createNativeStackNavigator();
 
