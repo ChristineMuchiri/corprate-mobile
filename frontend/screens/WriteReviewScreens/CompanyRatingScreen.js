@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
+import { reviewThemes } from '../../utilities/theme';
 
 const CompanyRatingsPage = () => {
+  const theme = reviewThemes.companyRating;
   const navigation = useNavigation();
   const [companyName, setCompanyName] = useState('');
   const [overallRating, setOverallRating] = useState(0);
@@ -24,13 +26,16 @@ const CompanyRatingsPage = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: reviewThemes.base.background }]}>
+      {/* Header with theme color*/}
+      <View style={[styles.header, { borderBottomColor: reviewThemes.base.border }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#1e88e5" />
+          <Icon name="arrow-back" size={24} color={theme.primary} />
         </TouchableOpacity>
+          
+        
         <Text style={styles.headerTitle}>Company Rating</Text>
+        <Icon name={theme.icon} size={24} color={theme.primary} style={styles.themeIcon} />
       </View>
 
       <ScrollView 
@@ -41,9 +46,9 @@ const CompanyRatingsPage = () => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Company Name</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { borderColor: reviewThemes.base.border }]}
             placeholder="Enter company name"
-            placeholderTextColor="#666"
+            placeholderTextColor={reviewThemes.base.muted}
             value={companyName}
             onChangeText={setCompanyName}
           />
@@ -58,7 +63,7 @@ const CompanyRatingsPage = () => {
                 <Icon
                   name={star <= overallRating ? 'star' : 'star-outline'}
                   size={32}
-                  color={star <= overallRating ? '#FFD700' : '#666'}
+                  color={star <= overallRating ? theme.primary : reviewThemes.base.muted}
                 />
               </TouchableOpacity>
             ))}
@@ -74,18 +79,21 @@ const CompanyRatingsPage = () => {
                 key={index}
                 style={[
                   styles.moodButton,
-                  selectedMood === index && styles.selectedMood
+                  selectedMood === index && { 
+                    borderColor: theme.primary,
+                    backgroundColor: theme.secondary 
+                  }
                 ]}
                 onPress={() => setSelectedMood(index)}
               >
                 <Icon
                   name={mood.icon}
                   size={28}
-                  color={selectedMood === index ? '#1e88e5' : '#666'}
+                  color={selectedMood === index ? theme.primary : reviewThemes.base.muted}
                 />
                 <Text style={[
                   styles.moodLabel,
-                  selectedMood === index && styles.selectedMoodLabel
+                  selectedMood === index && { color: theme.primary, fontWeight: '600' }
                 ]}>
                   {mood.label}
                 </Text>
@@ -98,9 +106,9 @@ const CompanyRatingsPage = () => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Your Review</Text>
           <TextInput
-            style={styles.reviewInput}
+            style={[styles.reviewInput, { borderColor: reviewThemes.base.border }]}
             placeholder="Share your experience..."
-            placeholderTextColor="#666"
+            placeholderTextColor={reviewThemes.base.muted}
             multiline
             numberOfLines={5}
             value={reviewText}
@@ -113,6 +121,7 @@ const CompanyRatingsPage = () => {
           <TouchableOpacity 
             style={[
               styles.submitButton,
+              { backgroundColor: theme.primary },
               (!companyName || overallRating === 0) && styles.disabledButton
             ]}
             onPress={handleSubmit}
@@ -145,7 +154,13 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 20,
     fontWeight: '600',
+    flex: 1, // Takes available space
+    textAlign: 'center',
   },
+  themeIcon: {
+    marginLeft: 16,
+    opacity: 0.8, // Subtle appearance
+},
   content: {
     padding: 16,
     paddingBottom: 16,

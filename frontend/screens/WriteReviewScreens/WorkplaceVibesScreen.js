@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { reviewThemes } from '../../utilities/theme';
 
 const WorkplaceVibesScreen = ({ navigation }) => {
+  const theme = reviewThemes.workplaceVibes; // Orange theme
+  const baseTheme = reviewThemes.base;
   const [companyName, setCompanyName] = useState('');
   const [selectedAttributes, setSelectedAttributes] = useState([]);
   const [dressCode, setDressCode] = useState('');
@@ -32,23 +35,28 @@ const WorkplaceVibesScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: baseTheme.background}]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, {borderBottomColor: baseTheme.border}]}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="arrow-back" size={24} color="#1e88e5" />
+          <Icon name="arrow-back" size={24} color={theme.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Workplace Vibes</Text>
+        <Text style={[styles.headerTitle, {color: baseTheme.text}]}>Workplace Vibes</Text>
+        <Icon name={theme.icon} size={24} color={theme.primary} style={styles.themeIcon} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Company Name */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Company Name *</Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>Company Name *</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, {
+              backgroundColor: baseTheme.card,
+              color: baseTheme.text,
+              borderColor: baseTheme.border
+            }]}
             placeholder="Where did you experience these vibes?"
-            placeholderTextColor="#666"
+            placeholderTextColor={baseTheme.muted}
             value={companyName}
             onChangeText={setCompanyName}
           />
@@ -56,7 +64,7 @@ const WorkplaceVibesScreen = ({ navigation }) => {
 
         {/* Atmosphere Attributes */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>How would you describe the work environment? </Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>How would you describe the work environment?</Text>
           <View style={styles.attributeGrid}>
             {attributes.map(attr => (
               <TouchableOpacity 
@@ -66,13 +74,17 @@ const WorkplaceVibesScreen = ({ navigation }) => {
               >
                 <View style={[
                   styles.checkbox,
-                  selectedAttributes.includes(attr) && styles.checkedBox
+                  {borderColor: baseTheme.muted},
+                  selectedAttributes.includes(attr) && {
+                    backgroundColor: theme.primary,
+                    borderColor: theme.primary
+                  }
                 ]}>
                   {selectedAttributes.includes(attr) && (
                     <Icon name="check" size={16} color="#fff" />
                   )}
                 </View>
-                <Text style={styles.attributeText}>{attr}</Text>
+                <Text style={[styles.attributeText, {color: baseTheme.text}]}>{attr}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -80,18 +92,22 @@ const WorkplaceVibesScreen = ({ navigation }) => {
 
         {/* Dress Code */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Dress Code *</Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>Dress Code *</Text>
           <View style={styles.optionRow}>
             {['Formal', 'Business Casual', 'Casual', 'No Dress Code'].map(code => (
               <TouchableOpacity
                 key={code}
                 style={[
                   styles.codeOption,
-                  dressCode === code && styles.selectedCode
+                  {borderColor: baseTheme.border},
+                  dressCode === code && {
+                    backgroundColor: baseTheme.card,
+                    borderColor: theme.primary
+                  }
                 ]}
                 onPress={() => setDressCode(code)}
               >
-                <Text style={styles.codeText}>{code}</Text>
+                <Text style={[styles.codeText, {color: baseTheme.text}]}>{code}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -99,54 +115,60 @@ const WorkplaceVibesScreen = ({ navigation }) => {
 
         {/* Free Response */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Thoughts?</Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>Thoughts?</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, {
+              backgroundColor: baseTheme.card,
+              color: baseTheme.text,
+              borderColor: baseTheme.border
+            }]}
             placeholder="e.g. Friendly, Fast-paced, Innovative"
-            placeholderTextColor="#666"
+            placeholderTextColor={baseTheme.muted}
             value={freeResponse}
             onChangeText={setFreeResponse}
           />
         </View>
       
-
-      {/* Submit Button */}
-      <View style={styles.submitButtonContainer}>
-      <TouchableOpacity 
-        style={[
-          styles.submitButton,
-          (!companyName || !dressCode) && styles.disabledButton
-        ]}
-        onPress={handleSubmit}
-        disabled={!companyName || !dressCode}
-      >
-        <Text style={styles.submitText}>Submit</Text>
-      </TouchableOpacity>
-      </View>
+        {/* Submit Button */}
+        <View style={styles.submitButtonContainer}>
+          <TouchableOpacity 
+            style={[
+              styles.submitButton,
+              {backgroundColor: theme.secondary},
+              (!companyName || !dressCode) && styles.disabledButton
+            ]}
+            onPress={handleSubmit}
+            disabled={!companyName || !dressCode}
+          >
+            <Text style={styles.submitText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
 };
 
-// ... (keep all the same styles from previous implementation)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0b0d16',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#252838',
   },
   headerTitle: {
-    color: '#fff',
     fontSize: 20,
     fontWeight: '600',
     marginLeft: 16,
+    flex: 1, // Takes available space
+    textAlign: 'center',
   },
+  themeIcon: {
+    marginLeft: 16,
+    opacity: 0.8, // Subtle appearance
+},
   content: {
     padding: 16,
     paddingBottom: 16,
@@ -155,16 +177,9 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   sectionTitle: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 12,
-  },
-  starContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '80%',
-    alignSelf: 'center',
   },
   attributeGrid: {
     flexDirection: 'row',
@@ -182,17 +197,11 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#666',
     marginRight: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  checkedBox: {
-    backgroundColor: '#1e88e5',
-    borderColor: '#1e88e5',
-  },
   attributeText: {
-    color: '#fff',
     fontSize: 14,
   },
   optionRow: {
@@ -205,31 +214,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#252838',
     marginRight: 8,
     marginBottom: 8,
   },
-  selectedCode: {
-    backgroundColor: '#252838',
-    borderColor: '#1e88e5',
-  },
-  codeText: {
-    color: '#fff',
-  },
+  codeText: {},
   input: {
-    backgroundColor: '#1a1c2a',
-    color: '#fff',
     borderRadius: 8,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#252838',
   },
   submitButtonContainer: {
     marginTop: 16,
     marginBottom: 8,
   },
   submitButton: {
-    backgroundColor: '#1e88e5',
     borderRadius: 8,
     padding: 10,
     height: 44,
@@ -237,11 +235,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 12,
     marginVertical: 16,
-    width: 150, // Fixed width
-    alignSelf: 'center', // Center horizontally
+    width: 150,
+    alignSelf: 'center',
   },
   disabledButton: {
-    backgroundColor: '#252838',
     opacity: 0.7,
   },
   submitText: {

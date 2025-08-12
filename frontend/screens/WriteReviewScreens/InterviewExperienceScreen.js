@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { reviewThemes } from '../../utilities/theme';
 
 const InterviewExperienceScreen = ({ navigation, route }) => {
+  const theme = reviewThemes.interviewExperience; // Purple theme
+  const baseTheme = reviewThemes.base;
   const [companyName, setCompanyName] = useState(route.params?.company || '');
   const [jobTitle, setJobTitle] = useState('');
   const [processRounds, setProcessRounds] = useState('');
@@ -36,30 +39,40 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: baseTheme.background}]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, {borderBottomColor: baseTheme.border}]}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="arrow-back" size={24} color="#1e88e5" />
+          <Icon name="arrow-back" size={24} color={theme.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Interview Experience</Text>
+        <Text style={[styles.headerTitle, {color: baseTheme.text}]}>Interview Experience</Text>
+        <Icon name={theme.icon} size={24} color={theme.primary} style={styles.themeIcon} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Basic Info */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Job Details *</Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>Job Details *</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, {
+              backgroundColor: baseTheme.card,
+              color: baseTheme.text,
+              borderColor: baseTheme.border
+            }]}
             placeholder="Company Name"
-            placeholderTextColor="#666"
+            placeholderTextColor={baseTheme.muted}
             value={companyName}
             onChangeText={setCompanyName}
           />
           <TextInput
-            style={[styles.input, { marginTop: 12 }]}
+            style={[styles.input, { 
+              marginTop: 12,
+              backgroundColor: baseTheme.card,
+              color: baseTheme.text,
+              borderColor: baseTheme.border
+            }]}
             placeholder="Role (e.g. Frontend Engineer)"
-            placeholderTextColor="#666"
+            placeholderTextColor={baseTheme.muted}
             value={jobTitle}
             onChangeText={setJobTitle}
           />
@@ -67,37 +80,50 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
 
         {/* Interview Process */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Process Overview</Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>Process Overview</Text>
           <View style={styles.row}>
             <TextInput
-              style={[styles.input, { marginBottom: 12 }]}
+              style={[styles.input, { 
+                marginBottom: 12,
+                backgroundColor: baseTheme.card,
+                color: baseTheme.text,
+                borderColor: baseTheme.border
+              }]}
               placeholder="Total rounds"
-              placeholderTextColor="#666"
+              placeholderTextColor={baseTheme.muted}
               keyboardType="numeric"
               value={processRounds}
               onChangeText={setProcessRounds}
             />
             <TextInput
-              style={[styles.input]}
+              style={[styles.input, {
+                backgroundColor: baseTheme.card,
+                color: baseTheme.text,
+                borderColor: baseTheme.border
+              }]}
               placeholder="Duration (e.g. 3 weeks)"
-              placeholderTextColor="#666"
+              placeholderTextColor={baseTheme.muted}
               value={processDuration}
               onChangeText={setProcessDuration}
             />
           </View>
           
-          <Text style={styles.subtitle}>Interview Formats:</Text>
+          <Text style={[styles.subtitle, {color: baseTheme.muted}]}>Interview Formats:</Text>
           <View style={styles.typeGrid}>
             {interviewTypes.map(type => (
               <TouchableOpacity
                 key={type}
                 style={[
                   styles.typePill,
-                  selectedTypes.includes(type) && styles.selectedPill
+                  {borderColor: baseTheme.border},
+                  selectedTypes.includes(type) && {
+                    backgroundColor: baseTheme.card,
+                    borderColor: theme.primary
+                  }
                 ]}
                 onPress={() => toggleInterviewType(type)}
               >
-                <Text style={styles.typeText}>{type}</Text>
+                <Text style={[styles.typeText, {color: baseTheme.text}]}>{type}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -105,14 +131,14 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
 
         {/* Difficulty */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Difficulty Rating *</Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>Difficulty Rating *</Text>
           <View style={styles.starContainer}>
             {[1, 2, 3, 4, 5].map(star => (
               <TouchableOpacity key={star} onPress={() => setDifficulty(star)}>
                 <Icon 
                   name={star <= difficulty ? 'star' : 'star-outline'} 
                   size={32} 
-                  color={star <= difficulty ? '#FFD700' : '#666'} 
+                  color={star <= difficulty ? '#FFD700' : baseTheme.muted} 
                 />
               </TouchableOpacity>
             ))}
@@ -121,11 +147,15 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
 
         {/* Question Bank */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Questions Asked</Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>Questions Asked</Text>
           <TextInput
-            style={[styles.input, styles.multilineInput]}
+            style={[styles.input, styles.multilineInput, {
+              backgroundColor: baseTheme.card,
+              color: baseTheme.text,
+              borderColor: baseTheme.border
+            }]}
             placeholder="List technical/behavioral questions..."
-            placeholderTextColor="#666"
+            placeholderTextColor={baseTheme.muted}
             multiline
             numberOfLines={5}
             value={questions}
@@ -135,11 +165,15 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
 
         {/* Preparation Tips */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Preparation Advice</Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>Preparation Advice</Text>
           <TextInput
-            style={[styles.input, styles.multilineInput]}
+            style={[styles.input, styles.multilineInput, {
+              backgroundColor: baseTheme.card,
+              color: baseTheme.text,
+              borderColor: baseTheme.border
+            }]}
             placeholder="What should candidates focus on?"
-            placeholderTextColor="#666"
+            placeholderTextColor={baseTheme.muted}
             multiline
             numberOfLines={5}
             value={prepTips}
@@ -149,37 +183,41 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
 
         {/* Outcome */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Result (Optional)</Text>
+          <Text style={[styles.sectionTitle, {color: baseTheme.text}]}>Result (Optional)</Text>
           <View style={styles.row}>
             {['Got Offer', 'Rejected', 'Ghosted'].map(res => (
               <TouchableOpacity
                 key={res}
                 style={[
                   styles.outcomePill,
-                  outcome === res && styles.selectedOutcome
+                  {borderColor: baseTheme.border},
+                  outcome === res && {
+                    backgroundColor: baseTheme.card,
+                    borderColor: theme.primary
+                  }
                 ]}
                 onPress={() => setOutcome(res)}
               >
-                <Text style={styles.outcomeText}>{res}</Text>
+                <Text style={[styles.outcomeText, {color: baseTheme.text}]}>{res}</Text>
               </TouchableOpacity>
             ))}
           </View>
         </View>
       
-
-      {/* Submit Button */}
-      <View style={styles.submitContainer}>
-        <TouchableOpacity 
-          style={[
-            styles.submitButton,
-            (!companyName || !jobTitle || difficulty === 0) && styles.disabledButton
-          ]}
-          onPress={handleSubmit}
-          disabled={!companyName || !jobTitle || difficulty === 0}
-        >
-          <Text style={styles.submitText}>Share Experience</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Submit Button */}
+        <View style={styles.submitButtonContainer}>
+          <TouchableOpacity 
+            style={[
+              styles.submitButton,
+              {backgroundColor: theme.secondary},
+              (!companyName || !jobTitle || difficulty === 0) && styles.disabledButton
+            ]}
+            onPress={handleSubmit}
+            disabled={!companyName || !jobTitle || difficulty === 0}
+          >
+            <Text style={styles.submitText}>Share Experience</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -188,21 +226,24 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0b0d16',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#252838',
   },
   headerTitle: {
-    color: '#fff',
     fontSize: 20,
     fontWeight: '600',
     marginLeft: 16,
+    flex: 1, // Takes available space
+    textAlign: 'center',
   },
+  themeIcon: {
+    marginLeft: 16,
+    opacity: 0.8, // Subtle appearance
+},
   content: {
     padding: 16,
     paddingBottom: 80,
@@ -211,25 +252,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionTitle: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
   },
   subtitle: {
-    color: '#888',
     fontSize: 13,
     marginTop: 12,
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#1a1c2a',
-    color: '#fff',
     borderRadius: 8,
     padding: 14,
     fontSize: 15,
     borderWidth: 1,
-    borderColor: '#252838',
   },
   multilineInput: {
     minHeight: 120,
@@ -245,17 +281,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#252838',
     marginRight: 8,
     marginBottom: 8,
-    backgroundColor: '#1a1c2a',
-  },
-  selectedPill: {
-    backgroundColor: '#252838',
-    borderColor: '#1e88e5',
   },
   typeText: {
-    color: '#fff',
     fontSize: 13,
   },
   starContainer: {
@@ -270,17 +299,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#252838',
     marginRight: 8,
     marginBottom: 8,
-    backgroundColor: '#1a1c2a',
-  },
-  selectedOutcome: {
-    backgroundColor: '#252838',
-    borderColor: '#1e88e5',
   },
   outcomeText: {
-    color: '#fff',
     fontSize: 14,
   },
   submitButtonContainer: {
@@ -288,7 +310,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   submitButton: {
-    backgroundColor: '#1e88e5',
     borderRadius: 8,
     padding: 10,
     height: 44,
@@ -296,11 +317,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 12,
     marginVertical: 16,
-    width: 150, // Fixed width
-    alignSelf: 'center', // Center horizontally
+    width: 150,
+    alignSelf: 'center',
   },
   disabledButton: {
-    backgroundColor: '#252838',
     opacity: 0.7,
   },
   submitText: {
