@@ -134,6 +134,27 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref CorprateMobileTable
+  InterviewExperienceFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: write-reviews/
+      Handler: interviewexperience.lambda_handler
+      Runtime: python3.13
+      Architectures:
+      - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref CorprateMobileTable
+      Events:
+        InterviewExperienceEvent:
+          Type: HttpApi 
+          Properties:
+            Path: /write-reviews/interviewexperience
+            Method: POST
+            ApiId: !Ref CorprateMobileHttpApi
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CorprateMobileTable
   
 Outputs:
   CompanyRatingHttpApiUrl:

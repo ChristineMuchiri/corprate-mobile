@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { reviewThemes } from '../../utilities/theme';
+import { API_BASE_URL } from '@env';
 
 const InterviewExperienceScreen = ({ navigation, route }) => {
   const theme = reviewThemes.interviewExperience; // Purple theme
   const baseTheme = reviewThemes.base;
   const [companyName, setCompanyName] = useState(route.params?.company || '');
-  const [jobTitle, setJobTitle] = useState('');
+  const [role, setRole] = useState('');
   const [processRounds, setProcessRounds] = useState('');
   const [processDuration, setProcessDuration] = useState('');
   const [questions, setQuestions] = useState('');
@@ -29,14 +30,42 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
     );
   };
 
-  const handleSubmit = () => {
-    if (!companyName || !jobTitle || difficulty === 0) {
-      Alert.alert('Required Fields', 'Please fill company, role, and difficulty');
-      return;
-    }
-    Alert.alert('Thank You!', 'Your experience will help other candidates');
-    navigation.goBack();
-  };
+  const handleSubmit = async () => {
+            try {
+              const response = await fetch(`${API_BASE_URL}/write-reviews/interviewexperience`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  companyName,
+                  role,
+                  processRounds,
+                  processDuration,
+                  questions,
+                  prepTips,
+                  difficulty,
+                  selectedTypes,
+                  outcome,
+                }),
+              }
+            );
+              const data = await response.json();
+              if (response.ok) {
+                Alert.alert('Review Submitted', 'Thank you for your feedback!',
+                  
+                     navigation.goBack() 
+                     )
+          } else {
+                const errorText = await response.text();
+                Alert.alert('Submission Failed', 
+                  errorText || 'Something went wrong while submitting your review. Please try again');
+          } 
+            } catch (error) {
+              console.error(error);
+              Alert.alert('Network Error', 'We could not connect to the server. Please check your internet connection and try again.');
+          };
+          }
 
   return (
     <View style={[styles.container, {backgroundColor: baseTheme.background}]}>
@@ -73,8 +102,8 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
             }]}
             placeholder="Role (e.g. Frontend Engineer)"
             placeholderTextColor={baseTheme.muted}
-            value={jobTitle}
-            onChangeText={setJobTitle}
+            value={role}
+            onChangeText={setRole}
           />
         </View>
 
@@ -210,10 +239,10 @@ const InterviewExperienceScreen = ({ navigation, route }) => {
             style={[
               styles.submitButton,
               {backgroundColor: theme.secondary},
-              (!companyName || !jobTitle || difficulty === 0) && styles.disabledButton
+              (!companyName || !role || difficulty === 0) && styles.disabledButton
             ]}
             onPress={handleSubmit}
-            disabled={!companyName || !jobTitle || difficulty === 0}
+            disabled={!companyName || !role || difficulty === 0}
           >
             <Text style={styles.submitText}>Share Experience</Text>
           </TouchableOpacity>
