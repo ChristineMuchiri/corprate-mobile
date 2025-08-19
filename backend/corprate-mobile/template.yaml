@@ -62,7 +62,7 @@ Resources:
         Variables:
           TABLE_NAME: !Ref CorprateMobileTable
       Events:
-        HelloWorld:
+        CompanyRatingEvent:
           Type: HttpApi 
           Properties:
             Path: /write-reviews/companyrating
@@ -71,7 +71,48 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref CorprateMobileTable
-
+  GeneralReviewFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: write-reviews/
+      Handler: generalreview.lambda_handler
+      Runtime: python3.13
+      Architectures:
+      - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref CorprateMobileTable
+      Events:
+        GeneralReviewEvent:
+          Type: HttpApi 
+          Properties:
+            Path: /write-reviews/generalreview
+            Method: POST
+            ApiId: !Ref CorprateMobileHttpApi
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CorprateMobileTable
+  SalaryBenefitsFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: write-reviews/
+      Handler: salarybenefits.lambda_handler
+      Runtime: python3.13
+      Architectures:
+      - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref CorprateMobileTable
+      Events:
+        SalaryBenefitsEvent:
+          Type: HttpApi 
+          Properties:
+            Path: /write-reviews/salarybenefits
+            Method: POST 
+            ApiId: !Ref CorprateMobileHttpApi
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CorprateMobileTable
   
 Outputs:
   CompanyRatingHttpApiUrl:

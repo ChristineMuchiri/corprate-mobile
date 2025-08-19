@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert,
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { reviewThemes } from '../../utilities/theme';
+import { API_BASE_URL } from '@env';
 
 const SalaryBenefitsScreen = () => {
   const theme = reviewThemes.salaryBenefits; // Green theme
@@ -23,14 +24,40 @@ const SalaryBenefitsScreen = () => {
     gymMembership: false
   });
 
-  const handleSubmit = () => {
-    if (!companyName || !jobTitle || !yearsExperience || !monthlyPay) {
-      Alert.alert('Required Fields', 'Please fill in all required fields');
-      return;
-    }
-    Alert.alert('Submission Successful', 'Thank you for your salary information!');
-    navigation.goBack();
-  };
+  
+  const handleSubmit = async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/write-reviews/salarybenefits`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              companyName,
+              jobTitle,
+              yearsExperience,
+              monthlyPay,
+              comments,
+              benefits,
+            }),
+          }
+        );
+          const data = await response.json();
+          if (response.ok) {
+            Alert.alert('Review Submitted', 'Thank you for your feedback!',
+              
+                 navigation.goBack() 
+                 )
+      } else {
+            const errorText = await response.text();
+            Alert.alert('Submission Failed', 
+              errorText || 'Something went wrong while submitting your review. Please try again');
+      } 
+        } catch (error) {
+          console.error(error);
+          Alert.alert('Network Error', 'We could not connect to the server. Please check your internet connection and try again.');
+      };
+      }
 
   const toggleBenefit = (benefit) => {
     setBenefits({...benefits, [benefit]: !benefits[benefit]});
