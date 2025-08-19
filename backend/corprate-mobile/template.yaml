@@ -113,6 +113,27 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref CorprateMobileTable
+  WorkplaceVibesFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: write-reviews/
+      Handler: workplacevibes.lambda_handler
+      Runtime: python3.13
+      Architectures:
+      - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref CorprateMobileTable
+      Events:
+        WorkplaceVibesEvent:
+          Type: HttpApi 
+          Properties:
+            Path: /write-reviews/workplacevibes
+            Method: POST
+            ApiId: !Ref CorprateMobileHttpApi
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CorprateMobileTable
   
 Outputs:
   CompanyRatingHttpApiUrl:
