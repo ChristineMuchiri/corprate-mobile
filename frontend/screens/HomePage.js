@@ -1,16 +1,80 @@
 import React, { useState } from "react";
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Image,
+} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import * as ImagePicker from "expo-image-picker";
+import * as DocumentPicker from "expo-document-picker";
+import { API_BASE_URL } from '@env';
 
 const FeedPage = ({ onPost }) => {
   const [text, setText] = useState("");
+  const [imageUri, setImageUri] = useState(null);
+  const [gifUri, setGifUri] = useState(null);
 
-  const handlePost = () => {
-    if (text.trim()) {
-      onPost(text);
-      setText("");
+  const handlePickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.8,
+    });
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
     }
   };
+
+  const handlePickGif = async () => {
+    let result = await DocumentPicker.getDocumentAsync({
+      type: "image/gif",
+    });
+    if (result.type === "success") {
+      setGifUri(result.uri);
+    }
+  };
+
+  
+  const handlePost = async () => {
+  if (!text.trim() && !imageUri && !gifUri) return;
+
+  try {
+    const payload = {
+      type: "FreeThought",
+      text,
+      imageUri,   // optional
+      gifUri,     // optional
+    };
+
+    const response = await fetch(`${API_BASE_URL}/write-reviews/freethought`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to post: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("Posted successfully:", result);
+
+    // reset
+    setText("");
+    setImageUri(null);
+    setGifUri(null);
+  } catch (err) {
+    console.error("Error posting free thought:", err);
+    alert("❌ Could not post. Please try again.");
+  }
+};
+
 
   return (
     <View style={styles.maincontainer}>
@@ -52,22 +116,25 @@ const FeedPage = ({ onPost }) => {
           />
         </View>
 
+        {/* Preview */}
+        {imageUri && <Image source={{ uri: imageUri }} style={styles.previewImage} />}
+        {gifUri && <Image source={{ uri: gifUri }} style={styles.previewImage} />}
+
         {/* Actions row */}
         <View style={styles.actionsRow}>
-          <TouchableOpacity style={styles.actionBtn}>
+          <TouchableOpacity style={styles.actionBtn} onPress={handlePickImage}>
             <Icon name="photo-camera" size={20} color="#bbb" />
             <Text style={styles.actionText}>Photo</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionBtn}>
+          <TouchableOpacity style={styles.actionBtn} onPress={handlePickGif}>
             <Icon name="gif" size={20} color="#bbb" />
             <Text style={styles.actionText}>GIF</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
-          <Icon name="send" size={20} color="#fff" />
+            <Icon name="send" size={20} color="#fff" />
           </TouchableOpacity>
-
         </View>
       </View>
     </View>
@@ -102,12 +169,12 @@ const styles = StyleSheet.create({
 
   // Free Thoughts card
   container: {
-    backgroundColor: "#002b36", // subtle dark-blue tint inside card
+    backgroundColor: "#002b36",
     margin: 10,
     padding: 12,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#00b4d8", // turquoise outline
+    borderColor: "#00b4d8",
   },
   inputRow: {
     flexDirection: "row",
@@ -123,6 +190,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#fff",
     maxHeight: 100,
+  },
+  previewImage: {
+    width: "100%",
+    height: 150,
+    borderRadius: 10,
+    marginTop: 8,
   },
   actionsRow: {
     flexDirection: "row",
@@ -140,16 +213,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   postBtn: {
-    backgroundColor: "#00b4d8", // turquoise
+    backgroundColor: "#00b4d8",
     padding: 10,
-    borderRadius: 50, // circle
+    borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
-  },
-  postText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 14,
   },
 });
 

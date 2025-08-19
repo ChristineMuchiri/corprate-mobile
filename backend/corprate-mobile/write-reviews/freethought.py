@@ -30,7 +30,7 @@ def lambda_handler(event, context):
             "SK": f"FREETHOUGHT#{item_id}",
             "FeedPK": "FEED",
             "createdAt": created_at,
-            "ReviewType": "FreeThought",
+            "reviewType": "FreeThought",
             "Text": text,
         }
 
