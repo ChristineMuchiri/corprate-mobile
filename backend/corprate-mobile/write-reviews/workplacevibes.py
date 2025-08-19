@@ -40,6 +40,7 @@ def lambda_handler(event, context):
                 'freeResponse': free_response,
                 'reviewType': 'WorlkplaceVibes',
                 'createdAt': datetime.utcnow().isoformat(),
+                "FeedPK": "FEED",
             }
         )
         return {

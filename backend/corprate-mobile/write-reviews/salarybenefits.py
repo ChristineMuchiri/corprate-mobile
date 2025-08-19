@@ -44,6 +44,7 @@ def lambda_handler(event, context):
                 'benefits': benefits,
                 'reviewType': 'SalaryBenefits',
                 'createdAt': datetime.utcnow().isoformat(),
+                "FeedPK": "FEED",
             }
         )
         return {

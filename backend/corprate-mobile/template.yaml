@@ -42,12 +42,25 @@ Resources:
           AttributeType: S
         - AttributeName: SK
           AttributeType: S
+        - AttributeName: FeedPK
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
       KeySchema:
         - AttributeName: PK
           KeyType: HASH
         - AttributeName: SK
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
+      GlobalSecondaryIndexes:
+        - IndexName: FeedIndex
+          KeySchema:
+            - AttributeName: FeedPK
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
       
 
   CompanyRatingFunction:
@@ -150,6 +163,27 @@ Resources:
           Type: HttpApi 
           Properties:
             Path: /write-reviews/interviewexperience
+            Method: POST
+            ApiId: !Ref CorprateMobileHttpApi
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CorprateMobileTable
+  FreeThoughtFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: write-reviews/
+      Handler: freethought.lambda_handler
+      Runtime: python3.13
+      Architectures:
+      - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref CorprateMobileTable
+      Events:
+        FreeThoughtEvent:
+          Type: HttpApi 
+          Properties:
+            Path: /write-reviews/freethought
             Method: POST
             ApiId: !Ref CorprateMobileHttpApi
       Policies:

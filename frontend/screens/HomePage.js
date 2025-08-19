@@ -1,117 +1,156 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  SafeAreaView,
-} from 'react-native';
-import HeaderBar from '../utilities/HeaderBar'; 
-import { Ionicons } from '@expo/vector-icons'; // Or react-native-vector-icons
+import React, { useState } from "react";
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
-const dummyReviews = [
-  {
-    id: '1',
-    company: 'Acme Inc.',
-    review: 'Toxic management, unrealistic deadlines, but great coffee.',
-    date: '2 days ago',
-  },
-  {
-    id: '2',
-    company: 'DevHaus',
-    review: 'Supportive team, fair pay, work-life balance could be better.',
-    date: '5 days ago',
-  },
-  // Add more as needed
-];
+const FeedPage = ({ onPost }) => {
+  const [text, setText] = useState("");
 
-export default function HomePage({ navigation }) {
-  const renderItem = ({ item }) => (
-    <View style={styles.reviewCard}>
-      <Text style={styles.companyName}>{item.company}</Text>
-      <Text style={styles.reviewText}>{item.review}</Text>
-      <Text style={styles.dateText}>{item.date}</Text>
-    </View>
-  );
+  const handlePost = () => {
+    if (text.trim()) {
+      onPost(text);
+      setText("");
+    }
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-        <HeaderBar />
-      
+    <View style={styles.maincontainer}>
+      {/* Header Bar */}
+      <View style={styles.header}>
+        <TouchableOpacity>
+          <Icon name="account-circle" size={28} color="#fff" />
+        </TouchableOpacity>
 
-      <FlatList
-        data={dummyReviews}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      />
+        <Text style={styles.title}>CorpRate</Text>
 
-      {/* Floating Action Button */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.navigate('WriteReview')}
-      >
-        <Ionicons name="create-outline" size={24} color="#fff" />
-      </TouchableOpacity>
-    </SafeAreaView>
+        <View style={styles.headerRight}>
+          <TouchableOpacity style={styles.iconBtn}>
+            <Icon name="search" size={24} color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconBtn}>
+            <Icon name="notifications-none" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Free Thoughts Input Card */}
+      <View style={styles.container}>
+        {/* Input row */}
+        <View style={styles.inputRow}>
+          <Icon
+            name="chat-bubble-outline"
+            size={22}
+            color="#00b4d8"
+            style={styles.icon}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="💭 What's on your mind?"
+            placeholderTextColor="#555"
+            value={text}
+            onChangeText={setText}
+            multiline
+          />
+        </View>
+
+        {/* Actions row */}
+        <View style={styles.actionsRow}>
+          <TouchableOpacity style={styles.actionBtn}>
+            <Icon name="photo-camera" size={20} color="#bbb" />
+            <Text style={styles.actionText}>Photo</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.actionBtn}>
+            <Icon name="gif" size={20} color="#bbb" />
+            <Text style={styles.actionText}>GIF</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
+          <Icon name="send" size={20} color="#fff" />
+          </TouchableOpacity>
+
+        </View>
+      </View>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
+  maincontainer: {
     flex: 1,
-    backgroundColor: '#0b0d16',
-    paddingHorizontal: 16,
+    backgroundColor: "#0b0d16", // dark theme
   },
-  pageTitle: {
-    fontSize: 22,
-    fontWeight: '600',
-    color: '#fceabb',
-    marginVertical: 16,
-    textAlign: 'center',
+  // Header bar
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    backgroundColor: "#0b0d16",
   },
-  reviewCard: {
-    backgroundColor: '#1a1d29',
+  title: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  headerRight: {
+    flexDirection: "row",
+  },
+  iconBtn: {
+    marginLeft: 12,
+  },
+
+  // Free Thoughts card
+  container: {
+    backgroundColor: "#002b36", // subtle dark-blue tint inside card
+    margin: 10,
+    padding: 12,
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#f1ba2e',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 4,
+    borderWidth: 1,
+    borderColor: "#00b4d8", // turquoise outline
   },
-  companyName: {
-    color: '#f1ba2e',
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 4,
+  inputRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 8,
   },
-  reviewText: {
-    color: '#fff',
+  icon: {
+    marginRight: 8,
+    marginTop: 4,
+  },
+  input: {
+    flex: 1,
+    fontSize: 15,
+    color: "#fff",
+    maxHeight: 100,
+  },
+  actionsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  actionBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  actionText: {
+    color: "#bbb",
+    marginLeft: 4,
+    fontSize: 13,
+  },
+  postBtn: {
+    backgroundColor: "#00b4d8", // turquoise
+    padding: 10,
+    borderRadius: 50, // circle
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  postText: {
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 14,
-    marginBottom: 6,
-  },
-  dateText: {
-    color: '#aaa',
-    fontSize: 12,
-    textAlign: 'right',
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 30,
-    right: 20,
-    backgroundColor: '#f1ba2e',
-    borderRadius: 30,
-    width: 56,
-    height: 56,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#fceabb',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.6,
-    shadowRadius: 6,
-    elevation: 10,
   },
 });
+
+export default FeedPage;

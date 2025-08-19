@@ -39,6 +39,7 @@ def lambda_handler(event, context):
                 'reviewText': review_text,
                 'reviewType': 'CompanyRating',
                 'createdAt': datetime.utcnow().isoformat(),
+                "FeedPK": "FEED",
             }
         )
         return {

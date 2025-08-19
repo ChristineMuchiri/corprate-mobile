@@ -7,6 +7,6 @@ architecture = "x86_64"
 handler = "companyrating.lambda_handler"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["CompanyRatingFunction", "GeneralReviewFunction", "SalaryBenefitsFunction", "WorkplaceVibesFunction", "InterviewExperienceFunction"]
+functions = ["CompanyRatingFunction", "GeneralReviewFunction", "SalaryBenefitsFunction", "WorkplaceVibesFunction", "InterviewExperienceFunction", "FreeThoughtFunction"]
 
 [layer_build_definitions]

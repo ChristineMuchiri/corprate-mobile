@@ -51,6 +51,7 @@ def lambda_handler(event, context):
                 'prepTips': prep_tips,
                 'outcome': outcome,
                 'createdAt': datetime.utcnow().isoformat(),
+                "FeedPK": "FEED",
             }
         )
 
